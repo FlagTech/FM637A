@@ -77,7 +77,7 @@ def chat(url):
         response.close()
 
 def audio_player(audio_flag, file_name):
-    global url,read_buffer,spk_sample_rate,ranbow_on
+    global url,read_buffer,spk_sample_rate,rainbow_on
     r_light,g_light,b_light = save_color()
     url_2 = f'{url}/download/{file_name}'
     response = requests.get(url_2, stream=True)
@@ -95,7 +95,7 @@ def audio_player(audio_flag, file_name):
     elif audio_flag == None: # 講話不開燈
         pass
     else: # 播放音樂時開啟循環燈
-        start_ranbow()
+        start_rainbow()
     while True:
         gc.collect()
         if record_switch.value() == 0:
@@ -126,10 +126,10 @@ def set_color(red, green, blue):
     blue_pin.duty(int(blue))
 
 i = 1
-ranbow_on = True
-def ranbow():
-    global i,ranbow_on
-    if not ranbow_on:
+rainbow_on = True
+def rainbow():
+    global i,rainbow_on
+    if not rainbow_on:
         return
     i += 1
     breath_period = 2000
@@ -142,19 +142,19 @@ def ranbow():
     green_pin.duty(green_duty)
     blue_pin.duty(blue_duty)
 
-def start_ranbow():
-    global tim0, ranbow_on
-    ranbow_on = True
+def start_rainbow():
+    global tim0, rainbow_on
+    rainbow_on = True
     set_color(1023, 0, 1023)
     i = 1
     tim0 = Timer(0)
-    tim0.init(period=3, mode=Timer.PERIODIC, callback=lambda t: ranbow())
+    tim0.init(period=3, mode=Timer.PERIODIC, callback=lambda t: rainbow())
 
 
 def close_light():
-    global i,ranbow_on
+    global i,rainbow_on
     i = 0
-    ranbow_on = False
+    rainbow_on = False
     try:
         tim0.deinit()
     except:pass
@@ -199,11 +199,11 @@ def record(sec,LED=True):
     gc.collect()
 
 def RGB(args):
+    print(args)
     red, green, blue = args['red'], args['green'], args['blue']
     if red == "-1":
         audio_player(True,'temp.wav')
-        ranbow(2000)
+        start_rainbow()
     else:
         set_color(red, green, blue)
         audio_player(None,'temp.wav')
-    
