@@ -1,6 +1,6 @@
 from machine import I2S, Pin, PWM, Timer
 import machine
-import requests
+import urequests as requests
 import network
 import time
 import math
