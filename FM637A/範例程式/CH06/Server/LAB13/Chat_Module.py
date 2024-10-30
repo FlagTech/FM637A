@@ -4,9 +4,7 @@ import os
 import wave
 import json
 import pickle
-import requests
 from dotenv import load_dotenv
-from googlesearch import search
 load_dotenv(override=True)
 from openai import *
 from pydub import AudioSegment
@@ -298,46 +296,4 @@ def translate(args):
     cmd = {'cmd_name': '', 'cmd_args': {}}
     error_info = ''
     reply_text = target_result
-    return reply_text, cmd, error_info
-
-# ==============套件版 google_search===============
-def normal_search(keyword,num):
-    search_info = search(keyword, advanced=True, num_results=num)
-    content = "以下是最新資訊：\n"
-    for item in search_info:
-        content += f"標題：{item.title}\n"
-        content += f"摘要：{item.description}\n\n"
-    return content
-
-# ==============官方 google search api===============
-def custom_search(query,num):
-    GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
-    SEARCH_ENGINE_ID = os.getenv("SEARCH_ENGINE_ID")
-    url = f"https://www.googleapis.com/customsearch/v1?key={GOOGLE_API_KEY}&cx={SEARCH_ENGINE_ID}&q={query}&num={num}"
-    response = requests.get(url)
-    data = response.json()
-    content = "以下是最新資訊：\n"
-    for item in data['items']:
-        content += f"標題：{item['title']}\n"
-        content += f"摘要：{item['snippet']}\n\n"
-    return content
-
-def search_config(API_KEY=False):# 預設使用搜尋套件
-    global use_api
-    use_api = API_KEY
-
-# ==============google search 功能===============
-def google_search(args):
-    error_info = ''
-    keyword = args.get("user_text", None)
-    cmd = {'cmd_name': '', 'cmd_args': {}}
-    try:
-        if use_api : # 啟用google search API
-            reply_text = custom_search(keyword, 5)
-        else:
-            reply_text = normal_search(keyword, 5)
-    except Exception as e:
-        print(e)
-        reply_text = '網路查詢失敗'
-        error_info = e
     return reply_text, cmd, error_info
