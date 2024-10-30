@@ -17,7 +17,7 @@ function_mapping = {
     "黃色": lambda: set_color(1023, 1023, 0),
     "紫色": lambda: set_color(1023, 0, 1023),
     "藍綠色": lambda: set_color(0, 1023, 1023),
-    "循環燈": lambda: start_ranbow(),
+    "循環燈": lambda: start_rainbow(),
     "關燈": lambda: close_light(),
 }
 
