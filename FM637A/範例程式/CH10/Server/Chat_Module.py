@@ -11,7 +11,8 @@ from Train_Module import *
 load_dotenv(override=True)
 from openai import *
 from pydub import AudioSegment
-from pytube import YouTube
+# 使用 PyTubeFix 替換過舊會有問題的 PyTube 套件
+from pytubefix import YouTube
 from langchain.tools import YouTubeSearchTool
 tool = YouTubeSearchTool()
 
@@ -366,7 +367,11 @@ def youtube_to_wav(url):
     print('download---',end='')
     error_info = ''
     file_name = f'{uploads_dir}/music.mp4'
-    yt.streams.filter().get_audio_only().download(filename=file_name)
+    yt.streams.filter().get_audio_only().download(
+        # download 會濾掉檔名中的 '/' 等特殊字元
+        # 所以要把路徑單獨分開來
+        output_path=uploads_dir, 
+        filename='music.mp4')  
     file_name_wav = f'{uploads_dir}/music.wav'
     convert_to_wav(file_name, file_name_wav,"mp4")
     audio = AudioSegment.from_file(file_name_wav, format="wav")
